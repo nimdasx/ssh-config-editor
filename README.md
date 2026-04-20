@@ -1,8 +1,8 @@
-# 🖥️ SSH Config Manager
+# 🖥️ SSH Config Editor
 
 An elegant, developer-first desktop application built with **Tauri**, **React**, **TypeScript**, and **Tailwind CSS v4** to visually manage your local `~/.ssh/config` file.
 
-![SSH Config Manager Preview](./assets/screenshot.png)
+![SSH Config Editor Preview](./assets/screenshot.png)
 
 ## ✨ Features
 

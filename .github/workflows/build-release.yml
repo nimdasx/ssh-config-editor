@@ -53,7 +53,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: app-v__VERSION__ # Automatically reads the version from package.json
-          releaseName: 'SSH Config Manager v__VERSION__'
+          releaseName: 'SSH Config Editor v__VERSION__'
           releaseBody: 'See the "Assets" list below to download the appropriate installer file for your OS.'
           releaseDraft: false
           prerelease: false

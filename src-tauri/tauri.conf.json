@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "SSH Config Manager",
+  "productName": "SSH Config Editor",
   "version": "0.1.0",
   "identifier": "com.sshconfig.manager",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "SSH Config Manager",
+        "title": "SSH Config Editor",
         "width": 800,
         "height": 600
       }

@@ -1,5 +1,5 @@
 [package]
-name = "ssh-config-manager"
+name = "ssh-config-editor"
 version = "0.1.0"
 description = "A Tauri App"
 authors = ["you"]
