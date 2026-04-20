@@ -31,8 +31,8 @@ You need standard Node package utilities and the Rust toolchain installed:
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/your-username/ssh-config-manager.git
-cd ssh-config-manager
+git clone https://github.com/nimdasx/ssh-config-editor.git
+cd ssh-config-editor
 
 # 2. Install Javascript dependencies
 npm install

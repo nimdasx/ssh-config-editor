@@ -3457,7 +3457,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ssh-config-manager"
+name = "ssh-config-editor"
 version = "0.1.0"
 dependencies = [
  "dirs 5.0.1",
