@@ -2,7 +2,7 @@
 
 An elegant, developer-first desktop application built with **Tauri**, **React**, **TypeScript**, and **Tailwind CSS v4** to visually manage your local `~/.ssh/config` file.
 
-![SSH Config Manager Preview](./icons/128x128@2x.png) <!-- Update this path with a real screenshot when you publish! -->
+![SSH Config Manager Preview](./assets/screenshot.png)
 
 ## ✨ Features
 
