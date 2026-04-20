@@ -3,8 +3,8 @@ name: "Build and Release"
 on:
   push:
     tags:
-      - 'v*' # Trigger build otomatis jika nge-push tag versi seperti "v1.0.0"
-  workflow_dispatch: # Memungkinkan Anda menekan tombol "Run workflow" manual dari GitHub Web CI/CD
+      - 'v*' # Automatically trigger build when pushing a version tag like "v1.0.0"
+  workflow_dispatch: # Allows manual triggering of the workflow from the GitHub CI/CD Web UI
 
 jobs:
   release:
@@ -52,9 +52,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__ # Akan otomatis membaca versi dari package.json
+          tagName: app-v__VERSION__ # Automatically reads the version from package.json
           releaseName: 'SSH Config Manager v__VERSION__'
-          releaseBody: 'Lihat daftar "Assets" di bawah ini untuk men-download file installer yang sesuai dengan OS Anda.'
+          releaseBody: 'See the "Assets" list below to download the appropriate installer file for your OS.'
           releaseDraft: false
           prerelease: false
           args: --target ${{ matrix.rust-target }}
