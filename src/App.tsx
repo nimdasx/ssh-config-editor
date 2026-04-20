@@ -1,7 +1,45 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { Search, Plus, Terminal, Save, Trash2 } from "lucide-react";
+import { Search, Plus, Terminal, Save, Trash2, AlertTriangle, X } from "lucide-react";
 import { HostData } from "./types";
+
+// --- Confirm Dialog Component ---
+function ConfirmDialog({
+  message,
+  onConfirm,
+  onCancel,
+}: {
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-6 w-full max-w-sm mx-4">
+        <div className="flex items-start gap-3 mb-4">
+          <AlertTriangle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+          <p className="text-slate-200 text-sm">{message}</p>
+        </div>
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={onCancel}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-md border border-slate-700 text-slate-300 hover:bg-slate-800 transition-colors"
+          >
+            <X className="w-4 h-4" />
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md bg-red-600 hover:bg-red-500 text-white transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [hosts, setHosts] = useState<HostData[]>([]);
@@ -10,6 +48,7 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<HostData>({ original_host: "", host: "", params: {} });
+  const [confirmTarget, setConfirmTarget] = useState<string | null>(null);
 
   const loadHosts = async () => {
     try {
@@ -49,36 +88,32 @@ export default function App() {
       alert("Host name is required.");
       return;
     }
-    // Update formData locally so it acts as original content after save
     const dataToSave = { ...formData };
     try {
       await invoke("save_ssh_host", { data: dataToSave });
       await loadHosts();
-      // Reset the saved data original_host to new host if it was changed
       setSelectedHost(dataToSave);
       setFormData({ ...dataToSave, original_host: dataToSave.host });
       setIsEditing(false);
     } catch (e) {
       console.error(e);
-      alert("Failed to save: " + e);
     }
   };
 
-  const handleDelete = async (original_host: string) => {
-    if (!confirm(`Are you sure you want to delete ${original_host}?`)) return;
+  const handleDeleteConfirmed = async () => {
+    if (!confirmTarget) return;
+    setConfirmTarget(null);
     try {
-      await invoke("delete_ssh_host", { originalHost: original_host });
+      await invoke("delete_ssh_host", { originalHost: confirmTarget });
       await loadHosts();
       setSelectedHost(null);
       setFormData({ original_host: "", host: "", params: {} });
     } catch (e) {
-      console.error(e);
-      alert("Failed to delete: " + e);
+      console.error("Delete Error:", e);
     }
   };
 
   const updateParam = (key: string, value: string) => {
-    // If the value is empty, still update it so backend logic knows to remove it
     setFormData({
       ...formData,
       params: { ...formData.params, [key]: value },
@@ -87,6 +122,15 @@ export default function App() {
 
   return (
     <div className="flex h-screen bg-slate-900 text-slate-100 overflow-hidden font-sans">
+      {/* Confirm Delete Dialog */}
+      {confirmTarget && (
+        <ConfirmDialog
+          message={`Are you sure you want to delete host "${confirmTarget}"? This action cannot be undone.`}
+          onConfirm={handleDeleteConfirmed}
+          onCancel={() => setConfirmTarget(null)}
+        />
+      )}
+
       {/* Sidebar */}
       <div className="w-80 flex flex-col border-r border-slate-800 bg-slate-950">
         <div className="p-4 border-b border-slate-800 flex items-center justify-between">
@@ -94,7 +138,7 @@ export default function App() {
             <Terminal className="w-5 h-5 mr-2 text-blue-500" />
             SSH Config Editor
           </h1>
-          <button onClick={handleAddNew} className="p-1 rounded bg-blue-600 hover:bg-blue-500 text-white transition-colors title='New Host'">
+          <button onClick={handleAddNew} className="p-1 rounded bg-blue-600 hover:bg-blue-500 text-white transition-colors" title="New Host">
             <Plus className="w-5 h-5" />
           </button>
         </div>
@@ -146,7 +190,7 @@ export default function App() {
               <div className="flex space-x-2">
                 {formData.original_host && (
                   <button
-                    onClick={() => handleDelete(formData.original_host)}
+                    onClick={() => setConfirmTarget(formData.original_host)}
                     className="flex items-center px-3 py-2 text-sm rounded-md border border-red-900 text-red-400 hover:bg-red-950 transition-colors"
                   >
                     <Trash2 className="w-4 h-4 mr-1.5" />
