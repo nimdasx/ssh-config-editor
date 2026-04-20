@@ -14,7 +14,14 @@ An elegant, developer-first desktop application built with **Tauri**, **React**,
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### Quick Download (No Build Required)
+
+You don't need to install any development tools to use this application! Simply download the compiled executable:
+1. Go to the **[Releases](../../releases)** page on this repository.
+2. Under the **Assets** section of the latest release, download the file tailored for your OS (e.g., `.dmg`/`.app` for macOS, `.exe` for Windows, `.deb` for Linux).
+3. Open the downloaded file and enjoy!
+
+### For Developers (Build from Source)
 
 You need standard Node package utilities and the Rust toolchain installed:
 1. [Node.js](https://nodejs.org) (v18+)
